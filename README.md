@@ -28,6 +28,7 @@ Early foundation. Contracts defined for the AI, crypto, persistence, and memory 
 - **Encrypted memory:** AES-256-GCM crypto provider, SQLite encrypted store, and a memory store that seals every record before it touches disk, plus Generative-Agents-style retrieval.
 - **AI layer:** an OpenAI-compatible `INpcAiAdapter` (generate + stream, usage/cache parsing), a `ScriptedFallbackAdapter` (always-available deterministic behavior), and an `NpcPromptBuilder` that assembles a cache-stable prefix + per-turn retrieved memories.
 - **Simulation systems:** deterministic `ScheduleSystem` (daily routine with midnight wrap), `SpatialHashGrid` (proximity neighbor/pair queries), and `LodClassifier` (Near/Mid/Far bands by distance) — the logic that decides *when* and *at what fidelity* an NPC engages.
+- **Rules-of-engagement gate:** `ProximityInteractionSystem` ties it together — each tick it rebuilds the grid, finds candidate pairs, and gates each by LOD + per-pair cooldown + relationship into Ignored / RelationshipTick / TemplatedGreeting / EscalateToDialogue. Escalation crosses the `IDialogueEscalation` seam to the AI + encrypted-memory layers (concrete wiring in `App`).
 - **Runnable demo:** a console "talk to one remembering NPC" loop wiring crypto + store + memory + retriever + adapter.
 
 Engine rendering and the real-time game loop are not yet written; the simulation pieces above are pure systems, not yet driven by a tick loop.
