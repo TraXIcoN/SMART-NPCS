@@ -52,4 +52,24 @@ public sealed class NpcPromptBuilderTests
         Assert.Single(request.Volatile);
         Assert.Equal(AiRole.User, request.Volatile[0].Role);
     }
+
+    [Fact]
+    public void Beliefs_Go_In_Second_Prefix_Segment_And_Base_Persona_Stays_Stable()
+    {
+        var persona = new NpcPersona { NpcId = "brom", Name = "Brom", SystemPrompt = "You are Brom." };
+
+        var withoutBeliefs = NpcPromptBuilder.Build(persona, [], [AiMessage.User("hi")]);
+        var withBeliefs = NpcPromptBuilder.Build(
+            persona, [], [AiMessage.User("hi")],
+            beliefs: ["The player is a thief.", "I trust Mara."]);
+
+        // The base persona segment is byte-identical regardless of beliefs (cache stays warm).
+        Assert.Single(withoutBeliefs.CacheablePrefix);
+        Assert.Equal(2, withBeliefs.CacheablePrefix.Count);
+        Assert.Equal(withoutBeliefs.CacheablePrefix[0], withBeliefs.CacheablePrefix[0]);
+
+        // Beliefs land in the second segment.
+        Assert.Equal(AiRole.System, withBeliefs.CacheablePrefix[1].Role);
+        Assert.Contains("thief", withBeliefs.CacheablePrefix[1].Content, StringComparison.Ordinal);
+    }
 }

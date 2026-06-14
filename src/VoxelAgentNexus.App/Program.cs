@@ -41,6 +41,8 @@ await using var store = await SqliteEncryptedStore.OpenAsync(dbPath);
 var memory = new EncryptedMemoryStore(crypto, store);
 var retriever = new CompositeMemoryRetriever();
 var ai = BuildAdapter();
+var reflectionSystem = new ReflectionSystem(memory, new AiReflectionSynthesizer(ai), importanceThreshold: 12f);
+var reflectionEnabled = ai.Capabilities.ProviderName != "scripted-fallback";
 
 var priorMemories = await memory.LoadWorkingSetAsync(npcId);
 
@@ -84,9 +86,10 @@ while (true)
     };
     var retrieved = retriever.Retrieve(query, workingSet);
 
-    // 2. Assemble a cache-disciplined prompt (persona prefix + volatile memories/turns).
+    // 2. Assemble a cache-disciplined prompt (persona + beliefs prefix + volatile).
+    var beliefs = BeliefProjection.TopBeliefs(workingSet, maxBeliefs: 5);
     recentTurns.Add(AiMessage.User(input));
-    var request = NpcPromptBuilder.Build(persona, retrieved, recentTurns);
+    var request = NpcPromptBuilder.Build(persona, retrieved, recentTurns, beliefs: beliefs);
 
     // 3. Generate the reply (streamed). Works identically with the fallback adapter.
     Console.Write($"{persona.Name}> ");
@@ -115,6 +118,15 @@ while (true)
         CreatedAt = DateTimeOffset.UtcNow,
         LastAccessedAt = DateTimeOffset.UtcNow,
     });
+
+    // 5. Bottom-up growth: reflect when enough has happened, surfacing new beliefs.
+    if (reflectionEnabled)
+    {
+        foreach (var belief in await reflectionSystem.MaybeReflectAsync(npcId, DateTimeOffset.UtcNow))
+        {
+            Console.WriteLine($"  [{persona.Name} forms a belief: {belief.Content}]");
+        }
+    }
 }
 
 Console.WriteLine($"{persona.Name} will remember this. Farewell.");

@@ -39,10 +39,14 @@ internal sealed class NpcDialogueEscalation : IDialogueEscalation
             return;
         }
 
+        var workingSet = await _memory.LoadWorkingSetAsync(resolution.AgentA, cancellationToken);
+        var beliefs = BeliefProjection.TopBeliefs(workingSet, maxBeliefs: 5);
+
         var prompt = NpcPromptBuilder.Build(
             persona,
             retrieved: [],
             recentTurns: [AiMessage.User($"You cross paths with {resolution.AgentB}. Greet them in one short line, in character.")],
+            beliefs: beliefs,
             maxOutputTokens: 64);
 
         var reply = await _ai.GenerateAsync(prompt, cancellationToken);

@@ -16,13 +16,19 @@ namespace VoxelAgentNexus.Ai;
 public static class NpcPromptBuilder
 {
     /// <summary>Build a request for one NPC turn.</summary>
-    /// <param name="persona">Stable identity (becomes the cache prefix).</param>
+    /// <param name="persona">Stable identity (the immutable base of the cache prefix).</param>
     /// <param name="retrieved">Top-k memories from the retriever, most salient first.</param>
     /// <param name="recentTurns">Recent conversation turns, oldest first.</param>
+    /// <param name="beliefs">
+    /// The NPC's current durable beliefs (from reflection). Placed in a SECOND
+    /// prefix segment after the base persona, so it changes only when the NPC grows
+    /// — the base persona's cache still hits between reflections. (DESIGN_BRIEF.md §4, §9.)
+    /// </param>
     public static NpcAiRequest Build(
         NpcPersona persona,
         IReadOnlyList<ScoredMemory> retrieved,
         IReadOnlyList<AiMessage> recentTurns,
+        IReadOnlyList<string>? beliefs = null,
         NpcSalience salience = NpcSalience.Conversational,
         AiResponseFormat responseFormat = AiResponseFormat.Text,
         int maxOutputTokens = 256)
@@ -31,7 +37,9 @@ public static class NpcPromptBuilder
         ArgumentNullException.ThrowIfNull(retrieved);
         ArgumentNullException.ThrowIfNull(recentTurns);
 
-        var prefix = new[] { AiMessage.System(persona.SystemPrompt) };
+        var prefix = beliefs is { Count: > 0 }
+            ? new[] { AiMessage.System(persona.SystemPrompt), AiMessage.System(FormatBeliefs(beliefs)) }
+            : new[] { AiMessage.System(persona.SystemPrompt) };
 
         var volatileMessages = new List<AiMessage>(retrieved.Count + recentTurns.Count);
         if (retrieved.Count > 0)
@@ -59,6 +67,18 @@ public static class NpcPromptBuilder
         foreach (var scored in retrieved)
         {
             sb.Append("- ").AppendLine(scored.Memory.Content);
+        }
+
+        return sb.ToString().TrimEnd();
+    }
+
+    private static string FormatBeliefs(IReadOnlyList<string> beliefs)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Beliefs you have formed from experience:");
+        foreach (var belief in beliefs)
+        {
+            sb.Append("- ").AppendLine(belief);
         }
 
         return sb.ToString().TrimEnd();
