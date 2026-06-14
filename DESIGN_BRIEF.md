@@ -117,6 +117,18 @@ Hundreds of roaming agents cannot each run a model per interaction — it bankru
 
 ---
 
+## 9. Bottom-up emergence & run-to-run divergence (vision addendum)
+
+The target is *Sword Art Online: Alicization*-style bottom-up growth: NPCs start from light presets and grow more individuated through accumulated lived experience, and a world run from the same base state should rarely play out the same way twice.
+
+The existing architecture already supports this:
+
+- **Bottom-up personality is the memory stream (§3).** Observations accumulate; the importance-threshold reflection pass distills them into durable beliefs; those beliefs are folded back into the NPC's cacheable persona prefix — so the prompt the model sees literally grows from what the NPC has lived. No retraining; personality is emergent state in encrypted memory.
+- **Presets / preloaded conversations** are just seed memories + an initial persona + seed relationships written to the encrypted store at world creation (a `WorldSeeder`). They give each NPC a starting voice that then drifts.
+- **Divergence** comes from two compounding sources: (1) a single explicit world RNG **seed** driving stochastic movement, schedule jitter, and interaction tie-breaks — fix the seed for reproducible debugging, draw it from entropy for "different every run"; and (2) **LLM sampling temperature**, which makes dialogue non-deterministic and cascades through proximity encounters into divergent relationship graphs.
+
+**Design rule:** keep the simulation reproducible-by-seed (testable, debuggable) and concentrate *all* nondeterminism in (a) the injected RNG and (b) AI sampling — never in incidental ordering or wall-clock.
+
 ## References
 
 - Generative Agents: Interactive Simulacra of Human Behavior — https://dl.acm.org/doi/fullHtml/10.1145/3586183.3606763

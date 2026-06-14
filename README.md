@@ -31,7 +31,9 @@ Early foundation. Contracts defined for the AI, crypto, persistence, and memory 
 - **Rules-of-engagement gate:** `ProximityInteractionSystem` ties it together — each tick it rebuilds the grid, finds candidate pairs, and gates each by LOD + per-pair cooldown + relationship into Ignored / RelationshipTick / TemplatedGreeting / EscalateToDialogue. Escalation crosses the `IDialogueEscalation` seam to the AI + encrypted-memory layers (concrete wiring in `App`).
 - **Runnable demo:** a console "talk to one remembering NPC" loop wiring crypto + store + memory + retriever + adapter.
 
-Engine rendering and the real-time game loop are not yet written; the simulation pieces above are pure systems, not yet driven by a tick loop.
+- **Headless world loop:** `WorldSimulation` drives a fixed-step tick — advance clock → resolve schedules → move agents → snapshot → run the proximity gate. Movement randomness flows from a single injected seed, so a fixed seed reproduces a run exactly and a random seed makes every run diverge (the basis for emergent, replayable-or-unique worlds; see DESIGN_BRIEF.md §9).
+
+Engine rendering and the threaded real-time host are not yet written; the world loop above is headless and synchronous-per-tick.
 
 ## Build & test
 
