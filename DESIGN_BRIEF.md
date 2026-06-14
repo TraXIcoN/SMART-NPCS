@@ -130,6 +130,10 @@ The existing architecture already supports this:
 
 **Design rule:** keep the simulation reproducible-by-seed (testable, debuggable) and concentrate *all* nondeterminism in (a) the injected RNG and (b) AI sampling — never in incidental ordering or wall-clock.
 
+## 10. Topology — hosted shared world (decided)
+
+The project targets a **hosted shared world**: one authoritative server runs the world and streams it to browser (WebGPU) clients, so multiple players inhabit the same persistent town of growing NPCs. This changes the privacy pillar: agent data lives **server-side**, so the crypto layer (§2.4, §3.1) becomes **encryption-at-rest with a server-held key**, not client-side E2EE. The simulation/AI libraries are unchanged — the server (ASP.NET Core + SignalR) hosts them behind a real-time API, and the existing `AgentSnapshot` is what clients render. See `docs/adr/0002`.
+
 ## References
 
 - Generative Agents: Interactive Simulacra of Human Behavior — https://dl.acm.org/doi/fullHtml/10.1145/3586183.3606763

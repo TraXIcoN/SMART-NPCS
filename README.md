@@ -63,3 +63,11 @@ dotnet run --project src/VoxelAgentNexus.App
 ```
 
 A local server (Ollama / LM Studio / an MLX server) works the same way — just set `NEXUS_AI_BASE_URL` to its address.
+
+## Run the shared world (hosted, multiplayer)
+
+```
+dotnet run --project src/VoxelAgentNexus.Server
+```
+
+Then open http://localhost:5173 — open it in two tabs to watch two players share one world. NPCs roam on schedules; walk up to one and chat (set the `NEXUS_AI_*` env vars for real replies, otherwise the deterministic fallback answers). The 2D canvas is a placeholder; the WebGPU voxel renderer is the next frontend step (see `docs/adr/0001`, `docs/adr/0002`).

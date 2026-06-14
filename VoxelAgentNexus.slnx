@@ -8,6 +8,7 @@
     <Project Path="src/VoxelAgentNexus.Simulation/VoxelAgentNexus.Simulation.csproj" />
     <Project Path="src/VoxelAgentNexus.Engine/VoxelAgentNexus.Engine.csproj" />
     <Project Path="src/VoxelAgentNexus.App/VoxelAgentNexus.App.csproj" />
+    <Project Path="src/VoxelAgentNexus.Server/VoxelAgentNexus.Server.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/VoxelAgentNexus.IntegrationTests/VoxelAgentNexus.IntegrationTests.csproj" />

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voxel-Agent-Nexus — shared world</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; background: #0b0b10; color: #e8e8ea; }
+    header { padding: 12px 18px; font-weight: 700; border-bottom: 1px solid #23232c; display: flex; align-items: baseline; gap: 12px; }
+    header small { font-weight: 400; color: #7c7c88; }
+    #wrap { display: flex; gap: 16px; padding: 16px; flex-wrap: wrap; }
+    canvas { border: 1px solid #23232c; border-radius: 10px; display: block; }
+    #side { width: 340px; display: flex; flex-direction: column; }
+    #log { flex: 1; height: 470px; overflow-y: auto; border: 1px solid #23232c; border-radius: 10px; padding: 10px; font-size: 13px; line-height: 1.5; background: #0f0f15; }
+    #log div { margin-bottom: 3px; }
+    #log .npc b { color: #f0997b; }
+    #log .me  b { color: #5dcaa5; }
+    #log .you b { color: #85b7eb; }
+    #log .sys { color: #6b6b78; font-style: italic; }
+    form { display: flex; gap: 8px; margin-top: 10px; }
+    input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #2c2c36; background: #1b1b22; color: #e8e8ea; }
+    button { padding: 10px 14px; border-radius: 8px; border: 0; background: #6a61e0; color: #fff; cursor: pointer; font-weight: 600; }
+    .hint { font-size: 12px; color: #6b6b78; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>Voxel-Agent-Nexus <small id="status">connecting…</small></header>
+  <div id="wrap">
+    <div>
+      <canvas id="view" width="620" height="520"></canvas>
+      <div class="hint">Move with <b>WASD</b> / arrow keys — the view follows you. Walk near an NPC (orange) and talk in the chat.</div>
+    </div>
+    <div id="side">
+      <div id="log"></div>
+      <form id="chat">
+        <input id="msg" placeholder="Say something to the nearest NPC…" autocomplete="off" />
+        <button type="submit">Say</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+  <script>
+    const canvas = document.getElementById("view");
+    const ctx = canvas.getContext("2d");
+    const logEl = document.getElementById("log");
+    const statusEl = document.getElementById("status");
+
+    let myId = null;
+    let latest = null;
+    const myPos = { x: 0, y: 64, z: 0 };
+
+    const SCALE = 9;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    // SignalR's JSON casing can be Pascal or camel depending on config — read both.
+    const gp = (o, name) => {
+      if (o == null) return undefined;
+      if (o[name] !== undefined) return o[name];
+      const camel = name.charAt(0).toLowerCase() + name.slice(1);
+      return o[camel];
+    };
+
+    function dayTint(timeOfDay) {
+      const hour = timeOfDay ? parseInt(String(timeOfDay).split(":")[0], 10) || 0 : 12;
+      // 0 at deep night, 1 at midday
+      const d = Math.max(0, Math.sin(((hour - 6) / 12) * Math.PI));
+      const lerp = (a, b) => Math.round(a + (b - a) * d);
+      return `rgb(${lerp(11, 26)},${lerp(11, 30)},${lerp(18, 40)})`;
+    }
+
+    function render() {
+      const agents = gp(latest, "Agents") || [];
+      const me = agents.find((a) => gp(a, "Id") === myId);
+      const camX = me ? gp(me, "X") : myPos.x;
+      const camZ = me ? gp(me, "Z") : myPos.z;
+
+      ctx.fillStyle = dayTint(gp(latest, "TimeOfDay"));
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // grid that scrolls with the camera
+      ctx.strokeStyle = "rgba(255,255,255,0.05)";
+      const step = 5;
+      const startX = Math.floor(camX / step) * step;
+      const startZ = Math.floor(camZ / step) * step;
+      for (let gx = startX - 60; gx <= startX + 60; gx += step) {
+        const sx = cx + (gx - camX) * SCALE;
+        ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, canvas.height); ctx.stroke();
+      }
+      for (let gz = startZ - 60; gz <= startZ + 60; gz += step) {
+        const sz = cy + (gz - camZ) * SCALE;
+        ctx.beginPath(); ctx.moveTo(0, sz); ctx.lineTo(canvas.width, sz); ctx.stroke();
+      }
+
+      for (const a of agents) {
+        const ax = gp(a, "X"), az = gp(a, "Z");
+        const kind = gp(a, "Kind"), name = gp(a, "Name"), id = gp(a, "Id");
+        const sx = cx + (ax - camX) * SCALE;
+        const sz = cy + (az - camZ) * SCALE;
+        const isMe = id === myId;
+
+        if (kind === "npc") {
+          ctx.fillStyle = "#ef9f27";
+          ctx.beginPath(); ctx.roundRect(sx - 7, sz - 7, 14, 14, 3); ctx.fill();
+        } else {
+          ctx.fillStyle = isMe ? "#5dcaa5" : "#85b7eb";
+          ctx.beginPath(); ctx.arc(sx, sz, 7, 0, Math.PI * 2); ctx.fill();
+          if (isMe) { ctx.strokeStyle = "#eafff6"; ctx.lineWidth = 2; ctx.stroke(); }
+        }
+        ctx.fillStyle = "#d4d4da"; ctx.font = "11px system-ui"; ctx.textAlign = "center";
+        ctx.fillText(name || id, sx, sz - 12);
+      }
+
+      const t = gp(latest, "Tick"), tod = gp(latest, "TimeOfDay");
+      statusEl.textContent = `· ${tod || "--:--"} · tick ${t ?? 0} · ${agents.length} agents · you @ (${camX}, ${camZ})`;
+    }
+
+    function append(cls, who, text) {
+      const div = document.createElement("div");
+      div.className = cls;
+      div.innerHTML = `<b>${who}</b>: ${text}`;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    const connection = new signalR.HubConnectionBuilder().withUrl("/hub").withAutomaticReconnect().build();
+
+    connection.on("Welcome", (id, name) => {
+      myId = id;
+      const div = document.createElement("div");
+      div.className = "sys";
+      div.textContent = `you joined as ${name}`;
+      logEl.appendChild(div);
+    });
+    connection.on("Snapshot", (s) => { latest = s; render(); });
+    connection.on("Dialogue", (d) => {
+      const speakerId = gp(d, "SpeakerId");
+      const name = gp(d, "SpeakerName"), text = gp(d, "Text");
+      let cls = "you";
+      if (speakerId === myId) cls = "me";
+      else if (latest && (gp(latest, "Agents") || []).some((a) => gp(a, "Id") === speakerId && gp(a, "Kind") === "npc")) cls = "npc";
+      append(cls, name, text);
+    });
+
+    connection.start()
+      .then(() => { statusEl.textContent = "· connected"; })
+      .catch((err) => { statusEl.textContent = "· connection failed"; append("sys", "error", err.toString()); });
+
+    document.addEventListener("keydown", (e) => {
+      let moved = true;
+      if (e.key === "w" || e.key === "ArrowUp") myPos.z -= 1;
+      else if (e.key === "s" || e.key === "ArrowDown") myPos.z += 1;
+      else if (e.key === "a" || e.key === "ArrowLeft") myPos.x -= 1;
+      else if (e.key === "d" || e.key === "ArrowRight") myPos.x += 1;
+      else moved = false;
+      if (moved) {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
+        if (connection.state === "Connected") connection.invoke("Move", myPos.x, myPos.y, myPos.z);
+      }
+    });
+
+    document.getElementById("chat").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("msg");
+      const text = input.value.trim();
+      if (text && connection.state === "Connected") {
+        connection.invoke("Say", text);
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>

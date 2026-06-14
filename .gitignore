@@ -28,8 +28,9 @@ secrets.json
 *.sqlite-*
 *.db
 *.db-*
-/data/
-/keys/
+data/
+keys/
+*.key
 
 # Native / engine intermediates
 *.metallib

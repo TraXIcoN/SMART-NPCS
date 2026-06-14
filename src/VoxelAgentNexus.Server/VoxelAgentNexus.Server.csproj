@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- Hosted shared-world server. Runs the authoritative world and streams it to
+       browser clients over SignalR. Reuses every VoxelAgentNexus library.
+       NOTE: in the hosted model, the crypto layer is server-side encryption-at-rest
+       (server-held key), not client-side E2EE. (see docs/adr/0002.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Server</AssemblyName>
+    <!-- Host/glue project: don't fail the build on style analyzers. -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Crypto\VoxelAgentNexus.Crypto.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Persistence\VoxelAgentNexus.Persistence.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Memory\VoxelAgentNexus.Memory.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Ai\VoxelAgentNexus.Ai.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Simulation\VoxelAgentNexus.Simulation.csproj" />
+  </ItemGroup>
+
+</Project>
