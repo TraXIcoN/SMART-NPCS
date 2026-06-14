@@ -32,6 +32,7 @@ Early foundation. Contracts defined for the AI, crypto, persistence, and memory 
 - **Runnable demo:** a console "talk to one remembering NPC" loop wiring crypto + store + memory + retriever + adapter.
 
 - **Headless world loop:** `WorldSimulation` drives a fixed-step tick — advance clock → resolve schedules → move agents → snapshot → run the proximity gate. Movement randomness flows from a single injected seed, so a fixed seed reproduces a run exactly and a random seed makes every run diverge (the basis for emergent, replayable-or-unique worlds; see DESIGN_BRIEF.md §9).
+- **Bottom-up growth:** `ReflectionSystem` distills accumulated observations into durable belief memories once an importance threshold is crossed (`AiReflectionSynthesizer` does the LLM abstraction), and `WorldSeeder` bootstraps NPCs with preset memories + relationships. Together: NPCs start from presets and grow more individuated through lived experience (DESIGN_BRIEF.md §9).
 
 Engine rendering and the threaded real-time host are not yet written; the world loop above is headless and synchronous-per-tick.
 
