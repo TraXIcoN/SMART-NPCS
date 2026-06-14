@@ -40,3 +40,20 @@ dotnet test  VoxelAgentNexus.slnx
 ```
 
 Key tests (`tests/VoxelAgentNexus.IntegrationTests`): a memory round-trips through the AES-GCM + SQLite pipeline, and a scan of the raw database file asserts **no plaintext ever reaches disk**.
+
+## Run the NPC demo
+
+```
+dotnet run --project src/VoxelAgentNexus.App
+```
+
+Chat with Brom the blacksmith. Everything he "remembers" is encrypted on disk (`src/VoxelAgentNexus.App/bin/.../data/nexus.sqlite`); quit and re-run and he recalls prior conversations. With no AI endpoint set it uses a deterministic fallback. For real dialogue, point it at any OpenAI-compatible endpoint:
+
+```
+export NEXUS_AI_BASE_URL=https://api.openai.com/v1
+export NEXUS_AI_MODEL=gpt-4o-mini
+export NEXUS_AI_KEY=sk-...
+dotnet run --project src/VoxelAgentNexus.App
+```
+
+A local server (Ollama / LM Studio / an MLX server) works the same way — just set `NEXUS_AI_BASE_URL` to its address.

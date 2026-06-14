@@ -6,6 +6,10 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>VoxelAgentNexus.App</AssemblyName>
+    <!-- Sample/dev composition root: relax style-as-error so console glue
+         (string literals, HttpClient lifetime, broad catches) doesn't block runs.
+         Library projects keep the strict setting from Directory.Build.props. -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

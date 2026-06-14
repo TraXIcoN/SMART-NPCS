@@ -50,6 +50,22 @@ public sealed class DevKeyVault : IKeyVault
         return id;
     }
 
+    /// <summary>
+    /// Import an externally supplied key under a stable id and make it active.
+    /// DEV-ONLY: used by the persistent-key factory so memories decrypt across
+    /// runs. The shipping vault never accepts raw key bytes like this.
+    /// </summary>
+    internal void ImportActiveKey(string keyId, byte[] key)
+    {
+        if (key.Length != KeySizeBytes)
+        {
+            throw new ArgumentException($"Key must be {KeySizeBytes} bytes.", nameof(key));
+        }
+
+        _keys[keyId] = key;
+        _activeKeyId = keyId;
+    }
+
     /// <summary>Active key material for the crypto provider in this assembly.</summary>
     internal (string KeyId, byte[] Key) ActiveKey => (ActiveKeyId, _keys[ActiveKeyId]);
 
