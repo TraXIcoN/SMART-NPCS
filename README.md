@@ -26,9 +26,11 @@ Dependency direction points inward to `Core`; only `App` references everything. 
 Early foundation. Contracts defined for the AI, crypto, persistence, and memory layers. Two slices are implemented and tested:
 
 - **Encrypted memory:** AES-256-GCM crypto provider, SQLite encrypted store, and a memory store that seals every record before it touches disk, plus Generative-Agents-style retrieval.
-- **AI layer:** an OpenAI-compatible `INpcAiAdapter` (generate + stream, usage/cache parsing) and an `NpcPromptBuilder` that assembles a cache-stable prefix + per-turn retrieved memories.
+- **AI layer:** an OpenAI-compatible `INpcAiAdapter` (generate + stream, usage/cache parsing), a `ScriptedFallbackAdapter` (always-available deterministic behavior), and an `NpcPromptBuilder` that assembles a cache-stable prefix + per-turn retrieved memories.
+- **Simulation systems:** deterministic `ScheduleSystem` (daily routine with midnight wrap), `SpatialHashGrid` (proximity neighbor/pair queries), and `LodClassifier` (Near/Mid/Far bands by distance) — the logic that decides *when* and *at what fidelity* an NPC engages.
+- **Runnable demo:** a console "talk to one remembering NPC" loop wiring crypto + store + memory + retriever + adapter.
 
-Engine rendering, simulation, and game loops are not yet written.
+Engine rendering and the real-time game loop are not yet written; the simulation pieces above are pure systems, not yet driven by a tick loop.
 
 ## Build & test
 
