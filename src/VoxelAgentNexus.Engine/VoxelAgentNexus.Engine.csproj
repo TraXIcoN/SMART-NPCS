@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Engine: main-thread Metal rendering, voxel chunk management and meshing.
+       Allocation-free hot loop; never blocks on I/O, network, or crypto.
+       (DESIGN_BRIEF.md §2.1, §7 risk 2.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Engine</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+  </ItemGroup>
+
+</Project>

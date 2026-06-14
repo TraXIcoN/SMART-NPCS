@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Core: pure contracts and domain types. Depends on NOTHING else in the
+       solution. Every cross-module pipeline is expressed as an interface here
+       so modules stay loosely coupled. (DESIGN_BRIEF.md §2, Code Standards.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Core</AssemblyName>
+  </PropertyGroup>
+
+</Project>

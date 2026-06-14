@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Crypto: hardware-accelerated AES-GCM, key derivation, Secure Enclave /
+       Keychain key custody. Implements ICryptoProvider from Core.
+       (DESIGN_BRIEF.md §2.4, §3.1.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Crypto</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+  </ItemGroup>
+
+</Project>

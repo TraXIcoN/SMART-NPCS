@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/VoxelAgentNexus.Core/VoxelAgentNexus.Core.csproj" />
+    <Project Path="src/VoxelAgentNexus.Crypto/VoxelAgentNexus.Crypto.csproj" />
+    <Project Path="src/VoxelAgentNexus.Persistence/VoxelAgentNexus.Persistence.csproj" />
+    <Project Path="src/VoxelAgentNexus.Memory/VoxelAgentNexus.Memory.csproj" />
+    <Project Path="src/VoxelAgentNexus.Ai/VoxelAgentNexus.Ai.csproj" />
+    <Project Path="src/VoxelAgentNexus.Simulation/VoxelAgentNexus.Simulation.csproj" />
+    <Project Path="src/VoxelAgentNexus.Engine/VoxelAgentNexus.Engine.csproj" />
+    <Project Path="src/VoxelAgentNexus.App/VoxelAgentNexus.App.csproj" />
+  </Folder>
+  <Folder Name="/solution-items/">
+    <File Path="DESIGN_BRIEF.md" />
+    <File Path="README.md" />
+    <File Path="Directory.Build.props" />
+  </Folder>
+</Solution>

@@ -1,0 +1,22 @@
+<Project>
+
+  <!-- Shared settings applied to every project in the solution. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Architecture guardrail: GC tuned for a frame-sensitive host process.
+         Server GC + concurrent collection to keep pauses off the render thread.
+         (See DESIGN_BRIEF.md §7, risk 2.) -->
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+
+    <RootNamespace>VoxelAgentNexus</RootNamespace>
+  </PropertyGroup>
+
+</Project>

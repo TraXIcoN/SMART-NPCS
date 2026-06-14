@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- App: composition root. Wires the modules together, owns thread/lane setup
+       and dependency injection. The ONLY project that references everything.
+       (DESIGN_BRIEF.md §2.) -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>VoxelAgentNexus.App</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Crypto\VoxelAgentNexus.Crypto.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Persistence\VoxelAgentNexus.Persistence.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Memory\VoxelAgentNexus.Memory.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Ai\VoxelAgentNexus.Ai.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Simulation\VoxelAgentNexus.Simulation.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Engine\VoxelAgentNexus.Engine.csproj" />
+  </ItemGroup>
+
+</Project>

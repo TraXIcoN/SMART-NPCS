@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Persistence: local SQLite backend. All writes pass through the Crypto
+       boundary before touching disk; plaintext never persists.
+       (DESIGN_BRIEF.md §2.4, §3.1.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Persistence</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Crypto\VoxelAgentNexus.Crypto.csproj" />
+  </ItemGroup>
+
+</Project>

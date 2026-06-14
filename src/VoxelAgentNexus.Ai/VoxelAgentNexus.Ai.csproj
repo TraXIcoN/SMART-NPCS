@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Ai: implementations of INpcAiAdapter (cloud OpenAI-compatible now, local
+       SLM later), context assembly, cache-prefix management, salience routing.
+       Strictly async. (DESIGN_BRIEF.md §4, §6.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Ai</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+  </ItemGroup>
+
+</Project>

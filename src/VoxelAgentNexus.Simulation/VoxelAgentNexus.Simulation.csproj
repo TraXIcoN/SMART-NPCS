@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Simulation: fixed-timestep ECS world, rules of engagement, daily-schedule
+       / GOAP behavior, spatial-hash proximity, simulation level-of-detail.
+       Publishes the immutable NPC state snapshot the render thread reads.
+       (DESIGN_BRIEF.md §2.2, §5.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Simulation</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+  </ItemGroup>
+
+</Project>

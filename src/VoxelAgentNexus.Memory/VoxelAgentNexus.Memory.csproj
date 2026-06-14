@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Memory: tiered NPC memory (working / episodic / semantic / social graph),
+       recency x importance x relevance retrieval, importance-threshold
+       reflection. Plaintext working set lives in RAM only.
+       (DESIGN_BRIEF.md §3.) -->
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.Memory</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+    <ProjectReference Include="..\VoxelAgentNexus.Persistence\VoxelAgentNexus.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
