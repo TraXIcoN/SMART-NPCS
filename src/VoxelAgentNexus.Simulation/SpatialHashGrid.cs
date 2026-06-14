@@ -15,11 +15,7 @@ public sealed class SpatialHashGrid
 
     public SpatialHashGrid(int cellSize)
     {
-        if (cellSize <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(cellSize), "Cell size must be positive.");
-        }
-
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(cellSize);
         _cellSize = cellSize;
     }
 
@@ -44,10 +40,7 @@ public sealed class SpatialHashGrid
     /// <summary>Ids of all agents within <paramref name="radius"/> voxels of a point.</summary>
     public IReadOnlyList<string> QueryNeighbors(VoxelPosition center, int radius)
     {
-        if (radius < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(radius));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(radius);
 
         var radiusSquared = (long)radius * radius;
         var found = new List<string>();
@@ -68,10 +61,7 @@ public sealed class SpatialHashGrid
     /// </summary>
     public IReadOnlyList<InteractionCandidate> FindProximityPairs(int radius)
     {
-        if (radius < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(radius));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(radius);
 
         var radiusSquared = (long)radius * radius;
         var seen = new HashSet<(string, string)>();
