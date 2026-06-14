@@ -23,12 +23,15 @@ Dependency direction points inward to `Core`; only `App` references everything. 
 
 ## Status
 
-Pre-implementation scaffold. Contracts defined for the AI layer (`INpcAiAdapter`, `IEmbeddingProvider`); engine code and game loops not yet written.
+Early foundation. Contracts defined for the AI, crypto, persistence, and memory layers. The **encrypted-memory slice is implemented and tested**: AES-256-GCM crypto provider, SQLite encrypted store, and a memory store that seals every record before it touches disk, plus Generative-Agents-style retrieval. Engine rendering, simulation, and game loops are not yet written.
 
-## Build
+## Build & test
 
 Requires the .NET 10 SDK.
 
 ```
 dotnet build VoxelAgentNexus.slnx
+dotnet test  VoxelAgentNexus.slnx
 ```
+
+Key tests (`tests/VoxelAgentNexus.IntegrationTests`): a memory round-trips through the AES-GCM + SQLite pipeline, and a scan of the raw database file asserts **no plaintext ever reaches disk**.

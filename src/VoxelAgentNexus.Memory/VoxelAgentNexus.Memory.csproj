@@ -8,9 +8,10 @@
     <AssemblyName>VoxelAgentNexus.Memory</AssemblyName>
   </PropertyGroup>
 
+  <!-- Depends only on Core abstractions (ICryptoProvider, IEncryptedStore).
+       Concrete Crypto + Persistence are injected by App at composition. -->
   <ItemGroup>
     <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
-    <ProjectReference Include="..\VoxelAgentNexus.Persistence\VoxelAgentNexus.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>VoxelAgentNexus.IntegrationTests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- Test analyzers can be noisy; don't fail the build on style warnings. -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
+    <ProjectReference Include="..\..\src\VoxelAgentNexus.Crypto\VoxelAgentNexus.Crypto.csproj" />
+    <ProjectReference Include="..\..\src\VoxelAgentNexus.Persistence\VoxelAgentNexus.Persistence.csproj" />
+    <ProjectReference Include="..\..\src\VoxelAgentNexus.Memory\VoxelAgentNexus.Memory.csproj" />
+  </ItemGroup>
+
+</Project>

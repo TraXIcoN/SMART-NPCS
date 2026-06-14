@@ -1,15 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Persistence: local SQLite backend. All writes pass through the Crypto
-       boundary before touching disk; plaintext never persists.
-       (DESIGN_BRIEF.md §2.4, §3.1.) -->
+  <!-- Persistence: local SQLite backend. Implements IEncryptedStore and persists
+       ONLY SealedBlobs — it has no key access and never sees plaintext, so it
+       does not reference Crypto. Sealing happens in the Memory layer before a
+       record reaches here. (DESIGN_BRIEF.md §3.1.) -->
   <PropertyGroup>
     <AssemblyName>VoxelAgentNexus.Persistence</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\VoxelAgentNexus.Core\VoxelAgentNexus.Core.csproj" />
-    <ProjectReference Include="..\VoxelAgentNexus.Crypto\VoxelAgentNexus.Crypto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Bump to the 10.x line once validated against the installed .NET 10 SDK. -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

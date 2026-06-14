@@ -9,6 +9,9 @@
     <Project Path="src/VoxelAgentNexus.Engine/VoxelAgentNexus.Engine.csproj" />
     <Project Path="src/VoxelAgentNexus.App/VoxelAgentNexus.App.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/VoxelAgentNexus.IntegrationTests/VoxelAgentNexus.IntegrationTests.csproj" />
+  </Folder>
   <Folder Name="/solution-items/">
     <File Path="DESIGN_BRIEF.md" />
     <File Path="README.md" />
