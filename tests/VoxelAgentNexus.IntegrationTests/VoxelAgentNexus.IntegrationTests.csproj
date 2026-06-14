@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\src\VoxelAgentNexus.Crypto\VoxelAgentNexus.Crypto.csproj" />
     <ProjectReference Include="..\..\src\VoxelAgentNexus.Persistence\VoxelAgentNexus.Persistence.csproj" />
     <ProjectReference Include="..\..\src\VoxelAgentNexus.Memory\VoxelAgentNexus.Memory.csproj" />
+    <ProjectReference Include="..\..\src\VoxelAgentNexus.Ai\VoxelAgentNexus.Ai.csproj" />
   </ItemGroup>
 
 </Project>

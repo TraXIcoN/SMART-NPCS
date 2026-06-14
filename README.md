@@ -23,7 +23,12 @@ Dependency direction points inward to `Core`; only `App` references everything. 
 
 ## Status
 
-Early foundation. Contracts defined for the AI, crypto, persistence, and memory layers. The **encrypted-memory slice is implemented and tested**: AES-256-GCM crypto provider, SQLite encrypted store, and a memory store that seals every record before it touches disk, plus Generative-Agents-style retrieval. Engine rendering, simulation, and game loops are not yet written.
+Early foundation. Contracts defined for the AI, crypto, persistence, and memory layers. Two slices are implemented and tested:
+
+- **Encrypted memory:** AES-256-GCM crypto provider, SQLite encrypted store, and a memory store that seals every record before it touches disk, plus Generative-Agents-style retrieval.
+- **AI layer:** an OpenAI-compatible `INpcAiAdapter` (generate + stream, usage/cache parsing) and an `NpcPromptBuilder` that assembles a cache-stable prefix + per-turn retrieved memories.
+
+Engine rendering, simulation, and game loops are not yet written.
 
 ## Build & test
 
