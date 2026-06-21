@@ -127,6 +127,32 @@ public sealed class GameWorld
         return best;
     }
 
+    /// <summary>Immutable NPC snapshots for the proximity gate.</summary>
+    public IReadOnlyList<AgentSnapshot> NpcSnapshots()
+    {
+        var list = new List<AgentSnapshot>(_npcs.Count);
+        foreach (var npc in _npcs)
+        {
+            list.Add(new AgentSnapshot(npc.Id, npc.Position));
+        }
+
+        return list;
+    }
+
+    /// <summary>A connected player's position (for LOD), or null if nobody is online.</summary>
+    public VoxelPosition? FirstPlayerPosition()
+    {
+        foreach (var player in _players.Values)
+        {
+            return player.Position;
+        }
+
+        return null;
+    }
+
+    /// <summary>Display name for an agent id (NPC name or the id itself).</summary>
+    public string NameOf(string id) => Personas.TryGetValue(id, out var persona) ? persona.Name : id;
+
     /// <summary>Advance the world one tick and produce a broadcast snapshot.</summary>
     public SnapshotDto Tick(DateTimeOffset now)
     {

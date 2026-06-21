@@ -70,4 +70,4 @@ A local server (Ollama / LM Studio / an MLX server) works the same way — just 
 dotnet run --project src/VoxelAgentNexus.Server
 ```
 
-Then open http://localhost:5173 — open it in two tabs to watch two players share one world. NPCs roam on schedules; walk up to one and chat (set the `NEXUS_AI_*` env vars for real replies, otherwise the deterministic fallback answers). The 2D canvas is a placeholder; the WebGPU voxel renderer is the next frontend step (see `docs/adr/0001`, `docs/adr/0002`).
+Then open http://localhost:5173 — open it in two tabs to watch two players share one world. The client is a **Babylon.js WebGPU 3D scene** (falls back to WebGL): move with WASD, drag to orbit, walk up to an NPC (orange) and chat (set the `NEXUS_AI_*` env vars for real replies, otherwise the deterministic fallback answers). The town currently uses procedural placeholder meshes; dropping CC0 glTF models into `wwwroot/assets/` swaps them in (see `docs/art-direction.md`, `docs/adr/0001`, `docs/adr/0002`).
